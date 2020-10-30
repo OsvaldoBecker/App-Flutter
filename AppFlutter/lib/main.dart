@@ -1,6 +1,7 @@
 import 'package:AppFlutter/screens/home.dart';
 import 'package:AppFlutter/screens/imc.dart';
 import 'package:AppFlutter/screens/press.dart';
+import 'package:AppFlutter/screens/users/usersList.dart';
 import 'package:AppFlutter/screens/about.dart';
 import 'package:flutter/material.dart';
 
@@ -27,6 +28,9 @@ class MyApp extends StatelessWidget {
               ),
           '/press': (context) => PressPage(
                 title: "Press counter",
+              ),
+          '/usersList': (context) => UsersListPage(
+                title: "Users list",
               ),
           '/about': (context) => AboutPage(
                 title: "About",

@@ -31,6 +31,12 @@ class HomePage extends StatelessWidget {
                 },
               ),
               RaisedButton(
+                child: Text('Users'),
+                onPressed: () {
+                  Navigator.of(context).pushNamed('/usersList');
+                },
+              ),
+              RaisedButton(
                 child: Text('About'),
                 onPressed: () {
                   Navigator.of(context).pushNamed('/about');
