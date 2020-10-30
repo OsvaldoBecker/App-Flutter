@@ -3,7 +3,7 @@ import 'package:AppFlutter/domain/user.dart';
 import 'package:http/http.dart' as http;
 
 class UserService {
-  String apiURL = 'http://192.168.0.109:3000/api'; // 192.168.0.109
+  String apiURL = 'http://192.168.0.107:3000/api'; // VERIFY IP
 
   Future<List<User>> getAll() async {
     final response = await http.get(apiURL + '/users');
@@ -16,7 +16,20 @@ class UserService {
     }
   }
 
-  Future<User> updateUser(User user) async {
+  insertUser(User user) async {
+    final response = await http.post(
+      apiURL + '/users',
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(user.toJson()),
+    );
+    if (response.statusCode != 200) {
+      throw Exception('Error in: ' + response.body);
+    }
+  }
+
+  updateUser(User user) async {
     final response = await http.put(
       apiURL + '/users',
       headers: <String, String>{
@@ -24,6 +37,16 @@ class UserService {
       },
       body: jsonEncode(user.toJson()),
     );
+    if (response.statusCode != 200) {
+      throw Exception('Error in: ' + response.body);
+    }
+  }
+
+  deleteUser(User user) async {
+    final response = await http
+        .delete(apiURL + '/users/' + user.id, headers: <String, String>{
+      'Content-Type': 'application/json; charset=UTF-8',
+    });
     if (response.statusCode != 200) {
       throw Exception('Error in: ' + response.body);
     }

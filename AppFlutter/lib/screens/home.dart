@@ -17,23 +17,12 @@ class HomePage extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             children: <Widget>[
-              Text('Home'),
-              RaisedButton(
-                child: Text('IMC'),
-                onPressed: () {
-                  Navigator.of(context).pushNamed('/imc');
-                },
-              ),
-              RaisedButton(
-                child: Text('Press'),
-                onPressed: () {
-                  Navigator.of(context).pushNamed('/press');
-                },
-              ),
+              Text('Home', style: Theme.of(context).textTheme.headline4),
+              SizedBox(height: 20),
               RaisedButton(
                 child: Text('Users'),
                 onPressed: () {
-                  Navigator.of(context).pushNamed('/usersList');
+                  Navigator.of(context).pushNamed('/users');
                 },
               ),
               RaisedButton(
