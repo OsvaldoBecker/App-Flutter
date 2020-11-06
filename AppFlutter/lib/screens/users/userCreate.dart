@@ -99,24 +99,6 @@ class _UserCreatePageState extends State<UserCreatePage> {
                     return null;
                   }),
               SizedBox(height: 10),
-              TextFormField(
-                  keyboardType: TextInputType.text,
-                  maxLength: 4,
-                  decoration: InputDecoration(
-                    icon: Icon(Icons.lock),
-                    border: OutlineInputBorder(),
-                    labelText: 'Type the password',
-                  ),
-                  onChanged: (text) {
-                    user.password = text;
-                  },
-                  validator: (value) {
-                    if (value.isEmpty) {
-                      return 'Password is required!';
-                    }
-                    return null;
-                  }),
-              SizedBox(height: 10),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [

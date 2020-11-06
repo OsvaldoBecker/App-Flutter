@@ -1,0 +1,15 @@
+# Obter usuários
+GET http://localhost:3000/api/users
+Content-Type: application/json
+###
+
+# Inserir usuário
+POST http://localhost:3000/api/users
+Content-Type: application/json
+
+{
+    "name": "Pedro da Silva",
+    "email": "pedro@email.com",
+    "cellphone": "55 4444 2222"
+}
+###

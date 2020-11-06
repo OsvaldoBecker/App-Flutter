@@ -1,17 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="a273f5ad-115b-4a6a-97c4-df00dda2968a" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.dart_tool/flutter_build/9c5e68e90abea4afc6fd97dd0428e777/.filecache" beforeDir="false" afterPath="$PROJECT_DIR$/.dart_tool/flutter_build/9c5e68e90abea4afc6fd97dd0428e777/.filecache" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.dart_tool/flutter_build/9c5e68e90abea4afc6fd97dd0428e777/app.dill" beforeDir="false" afterPath="$PROJECT_DIR$/.dart_tool/flutter_build/9c5e68e90abea4afc6fd97dd0428e777/app.dill" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.dart_tool/flutter_build/9c5e68e90abea4afc6fd97dd0428e777/kernel_snapshot.d" beforeDir="false" afterPath="$PROJECT_DIR$/.dart_tool/flutter_build/9c5e68e90abea4afc6fd97dd0428e777/kernel_snapshot.d" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.dart_tool/flutter_build/9c5e68e90abea4afc6fd97dd0428e777/kernel_snapshot.stamp" beforeDir="false" afterPath="$PROJECT_DIR$/.dart_tool/flutter_build/9c5e68e90abea4afc6fd97dd0428e777/kernel_snapshot.stamp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Dart_Packages.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Dart_Packages.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/domain/user.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/domain/user.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/screens/users/usersList.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/screens/users/usersList.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/services/userService.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/services/userService.dart" afterDir="false" />
-    </list>
+    <list default="true" id="a273f5ad-115b-4a6a-97c4-df00dda2968a" name="Default Changelist" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />

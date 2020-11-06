@@ -3,7 +3,7 @@ import 'package:AppFlutter/domain/user.dart';
 import 'package:http/http.dart' as http;
 
 class UserService {
-  String apiURL = 'http://192.168.0.107:3000/api'; // VERIFY IP
+  String apiURL = 'http://10.0.2.2:3000/api'; // VERIFY IP
 
   Future<List<User>> getAll() async {
     final response = await http.get(apiURL + '/users');

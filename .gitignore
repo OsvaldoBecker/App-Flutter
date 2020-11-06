@@ -1,3 +1,10 @@
+# API NODEJS 
+# dependencies
+node_modules/
+.pnp/
+.pnp.js
+
+# APP FLUTTER
 # Built application files
 *.apk
 *.aar

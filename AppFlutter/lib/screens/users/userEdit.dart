@@ -32,13 +32,6 @@ class _UserEditPageState extends State<UserEditPage> {
         .catchError((err) => {print(err)});
   }
 
-  void _delete() {
-    widget.userService
-        .deleteUser(user)
-        .then((value) => {Navigator.pop(context, 'Deleted')})
-        .catchError((err) => {print(err)});
-  }
-
   void _cancel() {
     Navigator.pop(context, 'Canceled');
   }
@@ -101,14 +94,6 @@ class _UserEditPageState extends State<UserEditPage> {
                       if (_formKey.currentState.validate()) {
                         _save();
                       }
-                    },
-                  ),
-                  SizedBox(width: 20),
-                  ElevatedButton.icon(
-                    icon: Icon(Icons.delete),
-                    label: Text('Delete'),
-                    onPressed: () {
-                      _delete();
                     },
                   ),
                   SizedBox(width: 20),

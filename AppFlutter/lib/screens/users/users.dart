@@ -2,6 +2,7 @@ import 'package:AppFlutter/domain/user.dart';
 import 'package:AppFlutter/screens/users/userCreate.dart';
 import 'package:AppFlutter/screens/users/userEdit.dart';
 import 'package:AppFlutter/services/userService.dart';
+import 'package:AppFlutter/util/confirmDialog.dart';
 import 'package:flutter/material.dart';
 
 class UsersPage extends StatefulWidget {
@@ -45,6 +46,21 @@ class _UsersPageState extends State<UsersPage> {
     _getUsers();
   }
 
+  void _deleteUser(User user) {
+    ConfirmDialog.show(
+      context,
+      'Are you sure you want to delete?',
+      () => ({
+        widget.userService
+            .deleteUser(user)
+            .then((value) => {_getUsers()})
+            .catchError((e) => {
+                  //Dialog.showAlertDialog(context, e.toString())
+                })
+      }),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -63,7 +79,33 @@ class _UsersPageState extends State<UsersPage> {
                       Spacer(),
                       Text(data.cellphone.toString()),
                     ]),
-                    onTap: () => _editUser(data),
+                    trailing: PopupMenuButton(
+                      onSelected: (option) {
+                        if (option == 'edit') {
+                          _editUser(data);
+                        } else {
+                          _deleteUser(data);
+                        }
+                      },
+                      itemBuilder: (context) => [
+                        PopupMenuItem(
+                          value: 'edit',
+                          child: Row(children: [
+                            Icon(Icons.edit),
+                            SizedBox(width: 10),
+                            Text('Edit'),
+                          ]),
+                        ),
+                        PopupMenuItem(
+                          value: 'delete',
+                          child: Row(children: [
+                            Icon(Icons.delete),
+                            SizedBox(width: 10),
+                            Text('Delete'),
+                          ]),
+                        ),
+                      ],
+                    ),
                   ))
               .toList(),
         ),
