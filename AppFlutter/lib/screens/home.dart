@@ -8,6 +8,34 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      drawer: Drawer(
+        child: ListView(
+          padding: EdgeInsets.zero,
+          children: <Widget>[
+            DrawerHeader(
+              child:
+                  Text('Header', style: Theme.of(context).textTheme.headline4),
+              decoration: BoxDecoration(
+                color: Colors.blue,
+              ),
+            ),
+            ListTile(
+              leading: Icon(Icons.person),
+              title: Text('Users'),
+              onTap: () {
+                Navigator.of(context).pushNamed('/users');
+              },
+            ),
+            ListTile(
+              leading: Icon(Icons.info),
+              title: Text('About'),
+              onTap: () {
+                Navigator.of(context).pushNamed('/about');
+              },
+            ),
+          ],
+        ),
+      ),
       appBar: AppBar(
         title: Text(title),
       ),
@@ -18,19 +46,6 @@ class HomePage extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.start,
             children: <Widget>[
               Text('Home', style: Theme.of(context).textTheme.headline4),
-              SizedBox(height: 20),
-              RaisedButton(
-                child: Text('Users'),
-                onPressed: () {
-                  Navigator.of(context).pushNamed('/users');
-                },
-              ),
-              RaisedButton(
-                child: Text('About'),
-                onPressed: () {
-                  Navigator.of(context).pushNamed('/about');
-                },
-              ),
             ],
           ),
         ),
