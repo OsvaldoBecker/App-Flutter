@@ -13,17 +13,30 @@ class HomePage extends StatelessWidget {
           padding: EdgeInsets.zero,
           children: <Widget>[
             DrawerHeader(
-              child:
-                  Text('Header', style: Theme.of(context).textTheme.headline4),
+              child: Text('Options'),
               decoration: BoxDecoration(
                 color: Colors.blue,
               ),
             ),
             ListTile(
               leading: Icon(Icons.person),
-              title: Text('Users'),
+              title: Text('Clients'),
               onTap: () {
-                Navigator.of(context).pushNamed('/users');
+                Navigator.of(context).pushNamed('/clients');
+              },
+            ),
+            ListTile(
+              leading: Icon(Icons.person),
+              title: Text('Employees'),
+              onTap: () {
+                Navigator.of(context).pushNamed('/employees');
+              },
+            ),
+            ListTile(
+              leading: Icon(Icons.table_view),
+              title: Text('Projects'),
+              onTap: () {
+                Navigator.of(context).pushNamed('/projects');
               },
             ),
             ListTile(
@@ -41,11 +54,12 @@ class HomePage extends StatelessWidget {
       ),
       body: Center(
         child: Container(
-          padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
+          padding: EdgeInsets.fromLTRB(20, 20, 20, 20),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             children: <Widget>[
-              Text('Home', style: Theme.of(context).textTheme.headline4),
+              Text('Click the button to open the options',
+                  style: Theme.of(context).textTheme.headline4),
             ],
           ),
         ),

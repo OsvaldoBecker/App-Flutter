@@ -1,0 +1,15 @@
+# Obter usuários
+GET http://localhost:3000/api/employees
+Content-Type: application/json
+###
+
+# Inserir usuário
+POST http://localhost:3000/api/employees
+Content-Type: application/json
+
+{
+    "name": "Pedro da Silva",
+    "email": "pedro@email.com",
+    "skills": "Communication and administration"
+}
+###

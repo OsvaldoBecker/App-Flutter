@@ -1,5 +1,7 @@
+import 'package:AppFlutter/screens/clients/clients.dart';
+import 'package:AppFlutter/screens/employees/employees.dart';
+import 'package:AppFlutter/screens/projects/projects.dart';
 import 'package:AppFlutter/screens/home.dart';
-import 'package:AppFlutter/screens/users/users.dart';
 import 'package:AppFlutter/screens/about.dart';
 import 'package:flutter/material.dart';
 
@@ -16,13 +18,16 @@ class MyApp extends StatelessWidget {
           primarySwatch: Colors.blue,
           visualDensity: VisualDensity.adaptivePlatformDensity,
         ),
-        home: HomePage(title: 'My Application'),
+        home: HomePage(title: 'Company Management'),
         routes: {
-          '/home': (context) => HomePage(
-                title: "Home",
+          '/clients': (context) => ClientsPage(
+                title: "Clients",
               ),
-          '/users': (context) => UsersPage(
-                title: "Users",
+          '/employees': (context) => EmployeesPage(
+                title: "Employees",
+              ),
+          '/projects': (context) => ProjectsPage(
+                title: "Projects",
               ),
           '/about': (context) => AboutPage(
                 title: "About",

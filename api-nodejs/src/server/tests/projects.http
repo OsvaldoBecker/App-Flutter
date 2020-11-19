@@ -1,0 +1,18 @@
+# Get all
+GET http://localhost:3000/api/projects
+Content-Type: application/json
+###
+
+# Insert
+POST http://localhost:3000/api/projects
+Content-Type: application/json
+ 
+{
+    "title": "Project One",
+    "description": "No description",
+    "beginDate": "10 Oct 2020 14:00:00 GMT",
+    "endDate": "14 Oct 2020 14:00:00 GMT",
+    "client": null,
+    "responsible": null
+}
+###

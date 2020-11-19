@@ -13,11 +13,12 @@ class AboutPage extends StatelessWidget {
       ),
       body: Center(
         child: Container(
-          padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
+          padding: EdgeInsets.fromLTRB(20, 20, 20, 20),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             children: <Widget>[
-              Text('About this application'),
+              Text(
+                  'Android application for managing customers, employees and projects.')
             ],
           ),
         ),

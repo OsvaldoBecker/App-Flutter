@@ -44,6 +44,12 @@
       "languageVersion": "2.0"
     },
     {
+      "name": "date_time_format",
+      "rootUri": "file:///C:/Faculdade/flutter/.pub-cache/hosted/pub.dartlang.org/date_time_format-1.1.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.7"
+    },
+    {
       "name": "fake_async",
       "rootUri": "file:///C:/Faculdade/flutter/.pub-cache/hosted/pub.dartlang.org/fake_async-1.2.0-nullsafety.1",
       "packageUri": "lib/",
@@ -158,7 +164,7 @@
       "languageVersion": "2.7"
     }
   ],
-  "generated": "2020-11-10T16:17:26.983412Z",
+  "generated": "2020-11-19T14:15:37.070879Z",
   "generator": "pub",
   "generatorVersion": "2.10.2"
 }
