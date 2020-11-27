@@ -19,8 +19,8 @@ class Project {
         json['_id'],
         json['title'],
         json['description'],
-        DateTime.parse(json['beginDate']),
-        DateTime.parse(json['endDate']),
+        DateTime.parse(json['beginDate']).toLocal(),
+        DateTime.parse(json['endDate']).toLocal(),
         Client.fromJson(json['client']),
         Employee.fromJson(json['responsible']));
   }

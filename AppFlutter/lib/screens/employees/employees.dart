@@ -1,9 +1,12 @@
 import 'package:AppFlutter/domain/employee.dart';
+import 'package:AppFlutter/domain/project.dart';
 import 'package:AppFlutter/screens/employees/employeeCreate.dart';
 import 'package:AppFlutter/screens/employees/employeeDetail.dart';
 import 'package:AppFlutter/screens/employees/employeeEdit.dart';
 import 'package:AppFlutter/services/employeeService.dart';
+import 'package:AppFlutter/services/projectService.dart';
 import 'package:AppFlutter/util/confirmDialog.dart';
+import 'package:AppFlutter/util/toastDialog.dart';
 import 'package:flutter/material.dart';
 
 class EmployeesPage extends StatefulWidget {
@@ -11,6 +14,7 @@ class EmployeesPage extends StatefulWidget {
 
   final String title;
   final EmployeeService employeeService = new EmployeeService();
+  final ProjectService projectService = new ProjectService();
 
   @override
   _EmployeesPageState createState() => _EmployeesPageState();
@@ -18,11 +22,13 @@ class EmployeesPage extends StatefulWidget {
 
 class _EmployeesPageState extends State<EmployeesPage> {
   List<Employee> employees = new List();
+  List<Project> projects = new List();
 
   @override
   void initState() {
     super.initState();
     _getEmployees();
+    _getProjects();
   }
 
   void _getEmployees() {
@@ -38,7 +44,6 @@ class _EmployeesPageState extends State<EmployeesPage> {
       MaterialPageRoute(
           builder: (context) => EmployeeDetailPage(employee: employee)),
     );
-    _getEmployees();
   }
 
   void _createEmployee() async {
@@ -57,16 +62,36 @@ class _EmployeesPageState extends State<EmployeesPage> {
   }
 
   void _deleteEmployee(Employee employee) {
-    ConfirmDialog.show(
-      context,
-      'Are you sure you want to delete?',
-      () => ({
-        widget.employeeService
-            .deleteEmployee(employee)
-            .then((value) => {_getEmployees()})
-            .catchError((e) => {print(e.toString())})
-      }),
-    );
+    if (_canDelete(employee)) {
+      ConfirmDialog.show(
+        context,
+        'Are you sure you want to delete?',
+        () => ({
+          widget.employeeService
+              .deleteEmployee(employee)
+              .then((value) => {ToastDialog.show('Deleted!'), _getEmployees()})
+              .catchError((e) => {print(e.toString())})
+        }),
+      );
+    } else {
+      ToastDialog.show(
+          'There are projects with this employee, you cannot delete!');
+    }
+  }
+
+  bool _canDelete(Employee employee) {
+    for (var project in projects) {
+      if (project.responsible.email == employee.email) return false;
+    }
+    return true;
+  }
+
+  void _getProjects() {
+    widget.projectService.getAll().then((value) => {
+          setState(() {
+            projects = value;
+          })
+        });
   }
 
   @override

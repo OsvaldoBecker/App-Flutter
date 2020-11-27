@@ -1,5 +1,6 @@
 import 'package:AppFlutter/domain/project.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class ProjectDetailPage extends StatefulWidget {
   ProjectDetailPage({Key key, this.project}) : super(key: key);
@@ -62,7 +63,8 @@ class _ProjectDetailPageState extends State<ProjectDetailPage> {
                     border: OutlineInputBorder(),
                     labelText: 'Begin date',
                   ),
-                  initialValue: project.beginDate.toString()),
+                  initialValue:
+                      new DateFormat("yyyy-MM-dd").format(project.beginDate)),
               SizedBox(height: 15),
               TextFormField(
                   enabled: false,
@@ -71,7 +73,8 @@ class _ProjectDetailPageState extends State<ProjectDetailPage> {
                     border: OutlineInputBorder(),
                     labelText: 'End date',
                   ),
-                  initialValue: project.endDate.toString()),
+                  initialValue:
+                      new DateFormat("yyyy-MM-dd").format(project.endDate)),
               SizedBox(height: 15),
               TextFormField(
                   enabled: false,

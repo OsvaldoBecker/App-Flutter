@@ -1,5 +1,6 @@
 import 'package:AppFlutter/domain/employee.dart';
 import 'package:AppFlutter/services/employeeService.dart';
+import 'package:AppFlutter/util/toastDialog.dart';
 import 'package:flutter/material.dart';
 
 class EmployeeEditPage extends StatefulWidget {
@@ -16,24 +17,48 @@ class _EmployeeEditPageState extends State<EmployeeEditPage> {
   final _formKey = GlobalKey<FormState>();
 
   Employee employee;
+  List<Employee> employees = new List();
 
   @override
   void initState() {
     super.initState();
+    _getEmployees();
     setState(() {
       employee = widget.employee;
     });
   }
 
+  void _getEmployees() {
+    widget.employeeService.getAll().then((value) => {
+          setState(() {
+            employees = value;
+          })
+        });
+  }
+
   void _save() {
-    widget.employeeService
-        .updateEmployee(employee)
-        .then((value) => {Navigator.pop(context, 'Saved')})
-        .catchError((err) => {print(err)});
+    if (_canUseCurrentEmail(employee)) {
+      widget.employeeService
+          .updateEmployee(employee)
+          .then((value) =>
+              {ToastDialog.show('Saved!'), Navigator.pop(context, 'Saved')})
+          .catchError((err) => {print(err)});
+    } else {
+      ToastDialog.show('There is already a employee with that email!');
+    }
   }
 
   void _cancel() {
+    ToastDialog.show('Canceled!');
     Navigator.pop(context, 'Canceled');
+  }
+
+  bool _canUseCurrentEmail(Employee employee) {
+    for (var other in employees) {
+      if (other.email == employee.email && other.id != employee.id)
+        return false;
+    }
+    return true;
   }
 
   @override
@@ -77,7 +102,7 @@ class _EmployeeEditPageState extends State<EmployeeEditPage> {
                     border: OutlineInputBorder(),
                     labelText: 'Type the email',
                   ),
-                  initialValue: employee.name,
+                  initialValue: employee.email,
                   onChanged: (text) {
                     employee.email = text;
                   },
@@ -101,6 +126,9 @@ class _EmployeeEditPageState extends State<EmployeeEditPage> {
                     employee.skills = text;
                   },
                   validator: (value) {
+                    if (value.isEmpty) {
+                      return 'Skills is required!';
+                    }
                     return null;
                   }),
               SizedBox(height: 15),

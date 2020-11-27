@@ -1,5 +1,6 @@
 import 'package:AppFlutter/domain/client.dart';
 import 'package:AppFlutter/services/clientService.dart';
+import 'package:AppFlutter/util/toastDialog.dart';
 import 'package:flutter/material.dart';
 
 class ClientCreatePage extends StatefulWidget {
@@ -15,24 +16,47 @@ class _ClientCreatePageState extends State<ClientCreatePage> {
   final _formKey = GlobalKey<FormState>();
 
   Client client;
+  List<Client> clients = new List();
 
   @override
   void initState() {
     super.initState();
+    _getClients();
     setState(() {
       client = new Client();
     });
   }
 
+  void _getClients() {
+    widget.clientService.getAll().then((value) => {
+          setState(() {
+            clients = value;
+          })
+        });
+  }
+
   void _save() {
-    widget.clientService
-        .insertClient(client)
-        .then((value) => {Navigator.pop(context, 'Saved')})
-        .catchError((err) => {print(err)});
+    if (_canUseCurrentEmail(client)) {
+      widget.clientService
+          .insertClient(client)
+          .then((value) =>
+              {ToastDialog.show('Saved!'), Navigator.pop(context, 'Saved')})
+          .catchError((err) => {print(err)});
+    } else {
+      ToastDialog.show('There is already a client with that email!');
+    }
   }
 
   void _cancel() {
+    ToastDialog.show('Canceled!');
     Navigator.pop(context, 'Canceled');
+  }
+
+  bool _canUseCurrentEmail(Client client) {
+    for (var other in clients) {
+      if (other.email == client.email) return false;
+    }
+    return true;
   }
 
   @override

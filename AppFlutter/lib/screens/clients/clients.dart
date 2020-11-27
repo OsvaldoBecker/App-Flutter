@@ -1,9 +1,12 @@
 import 'package:AppFlutter/domain/client.dart';
+import 'package:AppFlutter/domain/project.dart';
 import 'package:AppFlutter/screens/clients/clientCreate.dart';
 import 'package:AppFlutter/screens/clients/clientDetail.dart';
 import 'package:AppFlutter/screens/clients/clientEdit.dart';
 import 'package:AppFlutter/services/clientService.dart';
+import 'package:AppFlutter/services/projectService.dart';
 import 'package:AppFlutter/util/confirmDialog.dart';
+import 'package:AppFlutter/util/toastDialog.dart';
 import 'package:flutter/material.dart';
 
 class ClientsPage extends StatefulWidget {
@@ -11,6 +14,7 @@ class ClientsPage extends StatefulWidget {
 
   final String title;
   final ClientService clientService = new ClientService();
+  final ProjectService projectService = new ProjectService();
 
   @override
   _ClientsPageState createState() => _ClientsPageState();
@@ -18,11 +22,13 @@ class ClientsPage extends StatefulWidget {
 
 class _ClientsPageState extends State<ClientsPage> {
   List<Client> clients = new List();
+  List<Project> projects = new List();
 
   @override
   void initState() {
     super.initState();
     _getClients();
+    _getProjects();
   }
 
   void _getClients() {
@@ -37,7 +43,6 @@ class _ClientsPageState extends State<ClientsPage> {
     await Navigator.of(context).push(
       MaterialPageRoute(builder: (context) => ClientDetailPage(client: client)),
     );
-    _getClients();
   }
 
   void _createClient() async {
@@ -55,16 +60,36 @@ class _ClientsPageState extends State<ClientsPage> {
   }
 
   void _deleteClient(Client client) {
-    ConfirmDialog.show(
-      context,
-      'Are you sure you want to delete?',
-      () => ({
-        widget.clientService
-            .deleteClient(client)
-            .then((value) => {_getClients()})
-            .catchError((e) => {print(e.toString())})
-      }),
-    );
+    if (_canDelete(client)) {
+      ConfirmDialog.show(
+        context,
+        'Are you sure you want to delete?',
+        () => ({
+          widget.clientService
+              .deleteClient(client)
+              .then((value) => {ToastDialog.show('Deleted!'), _getClients()})
+              .catchError((e) => {print(e.toString())})
+        }),
+      );
+    } else {
+      ToastDialog.show(
+          'There are projects with this client, you cannot delete!');
+    }
+  }
+
+  bool _canDelete(Client client) {
+    for (var project in projects) {
+      if (project.client.email == client.email) return false;
+    }
+    return true;
+  }
+
+  void _getProjects() {
+    widget.projectService.getAll().then((value) => {
+          setState(() {
+            projects = value;
+          })
+        });
   }
 
   @override

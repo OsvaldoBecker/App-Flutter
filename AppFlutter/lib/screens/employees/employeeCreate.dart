@@ -1,5 +1,6 @@
 import 'package:AppFlutter/domain/employee.dart';
 import 'package:AppFlutter/services/employeeService.dart';
+import 'package:AppFlutter/util/toastDialog.dart';
 import 'package:flutter/material.dart';
 
 class EmployeeCreatePage extends StatefulWidget {
@@ -15,24 +16,47 @@ class _EmployeeCreatePageState extends State<EmployeeCreatePage> {
   final _formKey = GlobalKey<FormState>();
 
   Employee employee;
+  List<Employee> employees = new List();
 
   @override
   void initState() {
     super.initState();
+    _getEmployees();
     setState(() {
       employee = new Employee();
     });
   }
 
+  void _getEmployees() {
+    widget.employeeService.getAll().then((value) => {
+          setState(() {
+            employees = value;
+          })
+        });
+  }
+
   void _save() {
-    widget.employeeService
-        .insertEmployee(employee)
-        .then((value) => {Navigator.pop(context, 'Saved')})
-        .catchError((err) => {print(err)});
+    if (_canUseCurrentEmail(employee)) {
+      widget.employeeService
+          .insertEmployee(employee)
+          .then((value) =>
+              {ToastDialog.show('Saved!'), Navigator.pop(context, 'Saved')})
+          .catchError((err) => {print(err)});
+    } else {
+      ToastDialog.show('There is already a employee with that email!');
+    }
   }
 
   void _cancel() {
+    ToastDialog.show('Saved!');
     Navigator.pop(context, 'Canceled');
+  }
+
+  bool _canUseCurrentEmail(Employee employee) {
+    for (var other in employees) {
+      if (other.email == employee.email) return false;
+    }
+    return true;
   }
 
   @override
@@ -97,6 +121,9 @@ class _EmployeeCreatePageState extends State<EmployeeCreatePage> {
                     employee.skills = text;
                   },
                   validator: (value) {
+                    if (value.isEmpty) {
+                      return 'Skills is required!';
+                    }
                     return null;
                   }),
               SizedBox(height: 15),

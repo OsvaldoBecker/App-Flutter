@@ -4,7 +4,9 @@ import 'package:AppFlutter/domain/project.dart';
 import 'package:AppFlutter/services/clientService.dart';
 import 'package:AppFlutter/services/employeeService.dart';
 import 'package:AppFlutter/services/projectService.dart';
+import 'package:AppFlutter/util/toastDialog.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class ProjectEditPage extends StatefulWidget {
   ProjectEditPage({Key key, this.project}) : super(key: key);
@@ -28,6 +30,7 @@ class _ProjectEditPageState extends State<ProjectEditPage> {
   List clients;
   List employees;
   Project project;
+  List<Project> projects = new List();
 
   @override
   void initState() {
@@ -36,12 +39,15 @@ class _ProjectEditPageState extends State<ProjectEditPage> {
       clients = new List();
       employees = new List();
       project = widget.project;
-      beginDateController.text = project.beginDate.toString();
-      endDateController.text = project.endDate.toString();
+      beginDateController.text =
+          new DateFormat("dd-MM-yyyy").format(project.beginDate);
+      endDateController.text =
+          new DateFormat("dd-MM-yyyy").format(project.endDate);
       clientController.text = project.client.name;
       responsibleController.text = project.responsible.name;
       _getClients();
       _getEmployees();
+      _getProjects();
     });
   }
 
@@ -57,6 +63,14 @@ class _ProjectEditPageState extends State<ProjectEditPage> {
     widget.employeeService.getAll().then((value) => {
           setState(() {
             employees = value;
+          })
+        });
+  }
+
+  void _getProjects() {
+    widget.projectService.getAll().then((value) => {
+          setState(() {
+            projects = value;
           })
         });
   }
@@ -102,21 +116,34 @@ class _ProjectEditPageState extends State<ProjectEditPage> {
   }
 
   void _save() {
-    widget.projectService
-        .updateProject(project)
-        .then((value) => {Navigator.pop(context, 'Saved')})
-        .catchError((err) => {print(err)});
+    if (_canUseCurrentTitle(project)) {
+      widget.projectService
+          .updateProject(project)
+          .then((value) =>
+              {ToastDialog.show('Saved!'), Navigator.pop(context, 'Saved')})
+          .catchError((err) => {print(err)});
+    } else {
+      ToastDialog.show('There is already a projects with that title!');
+    }
   }
 
   void _cancel() {
+    ToastDialog.show('Canceled!');
     Navigator.pop(context, 'Canceled');
+  }
+
+  bool _canUseCurrentTitle(Project project) {
+    for (var other in projects) {
+      if (other.title == project.title && other.id != project.id) return false;
+    }
+    return true;
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Project Creating'),
+        title: Text('Project Editing'),
       ),
       body: SingleChildScrollView(
         padding: EdgeInsets.all(10),
@@ -175,12 +202,16 @@ class _ProjectEditPageState extends State<ProjectEditPage> {
                         .then((date) {
                       if (project.endDate != null) {
                         if (date.isBefore(project.endDate)) {
-                          beginDateController.text = date.toString();
-                          project.beginDate = date;
+                          beginDateController.text =
+                              new DateFormat("dd-MM-yyyy").format(date);
+                          project.beginDate = date.toUtc();
+                        } else {
+                          ToastDialog.show(
+                              'The begin date must be before the end date!');
                         }
                       } else {
                         beginDateController.text = date.toString();
-                        project.beginDate = date;
+                        project.beginDate = date.toUtc();
                       }
                     });
                   },
@@ -207,9 +238,15 @@ class _ProjectEditPageState extends State<ProjectEditPage> {
                             firstDate: DateTime.now(),
                             lastDate: DateTime(2050))
                         .then((date) {
-                      if (date.isAfter(project.beginDate)) {
-                        endDateController.text = date.toString();
-                        project.endDate = date;
+                      if (project.beginDate == null) {
+                        ToastDialog.show('Select the begin date first!');
+                      } else if (date.isAfter(project.beginDate)) {
+                        endDateController.text =
+                            new DateFormat("dd-MM-yyyy").format(date);
+                        project.endDate = date.toUtc();
+                      } else {
+                        ToastDialog.show(
+                            'The end date must be after the begin date!');
                       }
                     });
                   },

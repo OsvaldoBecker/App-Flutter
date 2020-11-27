@@ -4,7 +4,9 @@ import 'package:AppFlutter/domain/project.dart';
 import 'package:AppFlutter/services/clientService.dart';
 import 'package:AppFlutter/services/employeeService.dart';
 import 'package:AppFlutter/services/projectService.dart';
+import 'package:AppFlutter/util/toastDialog.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class ProjectCreatePage extends StatefulWidget {
   ProjectCreatePage({Key key}) : super(key: key);
@@ -27,6 +29,7 @@ class _ProjectCreatePageState extends State<ProjectCreatePage> {
   List clients;
   List employees;
   Project project;
+  List<Project> projects = new List();
 
   @override
   void initState() {
@@ -37,6 +40,7 @@ class _ProjectCreatePageState extends State<ProjectCreatePage> {
       project = new Project();
       _getClients();
       _getEmployees();
+      _getProjects();
     });
   }
 
@@ -52,6 +56,14 @@ class _ProjectCreatePageState extends State<ProjectCreatePage> {
     widget.employeeService.getAll().then((value) => {
           setState(() {
             employees = value;
+          })
+        });
+  }
+
+  void _getProjects() {
+    widget.projectService.getAll().then((value) => {
+          setState(() {
+            projects = value;
           })
         });
   }
@@ -97,14 +109,27 @@ class _ProjectCreatePageState extends State<ProjectCreatePage> {
   }
 
   void _save() {
-    widget.projectService
-        .insertProject(project)
-        .then((value) => {Navigator.pop(context, 'Saved')})
-        .catchError((err) => {print(err)});
+    if (_canUseCurrentTitle(project)) {
+      widget.projectService
+          .insertProject(project)
+          .then((value) =>
+              {ToastDialog.show('Saved!'), Navigator.pop(context, 'Saved')})
+          .catchError((err) => {print(err)});
+    } else {
+      ToastDialog.show('There is already a projects with that title!');
+    }
   }
 
   void _cancel() {
+    ToastDialog.show('Canceled!');
     Navigator.pop(context, 'Canceled');
+  }
+
+  bool _canUseCurrentTitle(Project project) {
+    for (var other in projects) {
+      if (other.title == project.title) return false;
+    }
+    return true;
   }
 
   @override
@@ -168,12 +193,17 @@ class _ProjectCreatePageState extends State<ProjectCreatePage> {
                         .then((date) {
                       if (project.endDate != null) {
                         if (date.isBefore(project.endDate)) {
-                          beginDateController.text = date.toString();
-                          project.beginDate = date;
+                          beginDateController.text =
+                              new DateFormat("yyyy-MM-dd").format(date);
+                          project.beginDate = date.toUtc();
+                        } else {
+                          ToastDialog.show(
+                              'The begin date must be before the end date!');
                         }
                       } else {
-                        beginDateController.text = date.toString();
-                        project.beginDate = date;
+                        beginDateController.text =
+                            new DateFormat("yyyy-MM-dd").format(date);
+                        project.beginDate = date.toUtc();
                       }
                     });
                   },
@@ -200,9 +230,15 @@ class _ProjectCreatePageState extends State<ProjectCreatePage> {
                             firstDate: DateTime.now(),
                             lastDate: DateTime(2050))
                         .then((date) {
-                      if (date.isAfter(project.beginDate)) {
-                        endDateController.text = date.toString();
-                        project.endDate = date;
+                      if (project.beginDate == null) {
+                        ToastDialog.show('Select the begin date first!');
+                      } else if (date.isAfter(project.beginDate)) {
+                        endDateController.text =
+                            new DateFormat("yyyy-MM-dd").format(date);
+                        project.endDate = date.toUtc();
+                      } else {
+                        ToastDialog.show(
+                            'The end date must be after the begin date!');
                       }
                     });
                   },

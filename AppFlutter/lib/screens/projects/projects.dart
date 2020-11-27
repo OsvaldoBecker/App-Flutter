@@ -4,6 +4,7 @@ import 'package:AppFlutter/screens/projects/projectDetail.dart';
 import 'package:AppFlutter/screens/projects/projectEdit.dart';
 import 'package:AppFlutter/services/projectService.dart';
 import 'package:AppFlutter/util/confirmDialog.dart';
+import 'package:AppFlutter/util/toastDialog.dart';
 import 'package:flutter/material.dart';
 
 class ProjectsPage extends StatefulWidget {
@@ -63,7 +64,7 @@ class _ProjectsPageState extends State<ProjectsPage> {
       () => ({
         widget.projectService
             .deleteProject(project)
-            .then((value) => {_getProjects()})
+            .then((value) => {ToastDialog.show('Deleted!'), _getProjects()})
             .catchError((e) => {print(e.toString())})
       }),
     );
